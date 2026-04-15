@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/yourusername/sub2api/handler"
 )
@@ -49,12 +50,12 @@ func main() {
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("Listening on %s", addr)
 
-	// Note: ReadTimeout and WriteTimeout added to avoid hanging connections
 	server := &http.Server{
 		Addr:         addr,
 		Handler:      router,
-		ReadTimeout:  30 * 1e9, // 30 seconds in nanoseconds (time.Duration)
-		WriteTimeout: 30 * 1e9,
+		ReadTimeout:  60 * time.Second, // increased to 60s for slow subscription sources
+		WriteTimeout: 60 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

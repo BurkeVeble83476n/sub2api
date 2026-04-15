@@ -49,9 +49,12 @@ func main() {
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("Listening on %s", addr)
 
+	// Note: ReadTimeout and WriteTimeout added to avoid hanging connections
 	server := &http.Server{
-		Addr:    addr,
-		Handler: router,
+		Addr:         addr,
+		Handler:      router,
+		ReadTimeout:  30 * 1e9, // 30 seconds in nanoseconds (time.Duration)
+		WriteTimeout: 30 * 1e9,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

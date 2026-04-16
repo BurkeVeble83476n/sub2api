@@ -20,8 +20,7 @@ const (
 var (
 	// Version is set at build time via ldflags
 	Version = defaultVersion
-	// Commit is set at build time via ldflags
-	Commit = "unknown"
+	// Commit is set at build time via ldflags "unknown"
 )
 
 func main() {
@@ -50,12 +49,13 @@ func main() {
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("Listening on %s", addr)
 
+	// Increased timeouts to better handle slow subscription sources
 	server := &http.Server{
 		Addr:         addr,
 		Handler:      router,
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		IdleTimeout:  90 * time.Second,
+		ReadTimeout:  60 * time.Second,
+		WriteTimeout: 60 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

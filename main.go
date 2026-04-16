@@ -49,12 +49,13 @@ func main() {
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("Listening on %s", addr)
 
-	// Increased timeouts to better handle slow subscription sources
+	// Increased timeouts to better handle slow subscription sources.
+	// Bumped ReadTimeout and WriteTimeout to 90s for particularly sluggish upstream URLs.
 	server := &http.Server{
 		Addr:         addr,
 		Handler:      router,
-		ReadTimeout:  60 * time.Second,
-		WriteTimeout: 60 * time.Second,
+		ReadTimeout:  90 * time.Second,
+		WriteTimeout: 90 * time.Second,
 		IdleTimeout:  120 * time.Second,
 	}
 
